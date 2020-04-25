@@ -7,8 +7,17 @@ import           Options.Applicative     hiding ( infoParser )
 
 -- type alias for data Int
 type ItemIndex = Int
-
+type ItemTitle = String
+type ItemPriority = Maybe String
+type ItemDueBy = Maybe String
 type ItemDescription = Maybe String
+
+data ItemUpdate = ItemUpdate
+  { titleUpdate :: Maybe ItemTitle
+  , descriptionUpdate :: Maybe ItemDescription
+  , priorityUpdate :: Maybe ItemPriority
+  , dueByUpdate :: Maybe ItemDueBy
+  } deriving Show
 
 data Command =
   Info
@@ -16,7 +25,7 @@ data Command =
   | List
   | Add
   | View
-  | Update
+  | Update ItemIndex ItemUpdate
   | Remove deriving Show
 
 infoParser :: Parser Command
@@ -35,7 +44,27 @@ viewParser :: Parser Command
 viewParser = pure View
 
 updateParser :: Parser Command
-updateParser = pure Update
+updateParser = Update <$> itemIndexParser <*> updateItemParser
+
+updateItemParser :: Parser ItemUpdate
+updateItemParser =
+  ItemUpdate
+    <$> optional titleUpdateParser
+    <*> optional descriptionUpdateParser
+    <*> optional priorityUpdateParser
+    <*> optional dueByUpdateParser
+
+titleUpdateParser :: Parser ItemTitle
+titleUpdateParser = undefined
+
+descriptionUpdateParser :: Parser ItemDescription
+descriptionUpdateParser = undefined
+
+priorityUpdateParser :: Parser ItemPriority
+priorityUpdateParser = undefined
+
+dueByUpdateParser :: Parser ItemDueBy
+dueByUpdateParser = undefined
 
 removeParser :: Parser Command
 removeParser = pure Remove
@@ -89,12 +118,17 @@ updateItemDescription = Just <$> itemValueDescrption <|> flag'
 --
 
 run :: FilePath -> Command -> IO ()
-run _ Info   = putStrLn "info from run"
-run _ Init   = putStrLn "init from run"
-run _ List   = putStrLn "list from run"
-run _ View   = putStrLn "view from run"
-run _ Add    = putStrLn "add from run"
-run _ Update = putStrLn "update from run"
+run _ Info = putStrLn "info from run"
+run _ Init = putStrLn "init from run"
+run _ List = putStrLn "list from run"
+run _ View = putStrLn "view from run"
+run _ Add  = putStrLn "add from run"
+run _ (Update index itemUpdate) =
+  putStrLn
+    $  "update index :"
+    ++ show index
+    ++ "update item_update: "
+    ++ show itemUpdate
 run _ Remove = putStrLn "remove from run"
 
 program :: IO ()
