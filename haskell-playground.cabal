@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c29757bd0bfba65b73e67051a88b5e82e63efa2bd48bd70607d93a6a981e404c
+-- hash: 90a390aa34094541895099f0ca92519380c60fe98370d8b447abcc39409b9102
 
 name:           haskell-playground
 version:        0.1.0.0
@@ -27,6 +27,7 @@ source-repository head
 
 library
   exposed-modules:
+      Command
       Lib
   other-modules:
       Paths_haskell_playground
